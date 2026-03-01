@@ -91,14 +91,10 @@ class table_resources_recyle extends dzz_table {
         }
         $uid = getglobal('uid');
         //查询有管理权限的群组id
-        $manageorg = C::t('organization')->fetch_all_manage_orgid();
-        $manageorgid = [];
-        foreach ($manageorg as $v) {
-            $manageorgid[] = $v['orgid'];
-        }
+        $manageorg = C::t('organization')->fetch_all_orgid();
         $wheresql .= 'and uid = %d or gid in(%n)';
         $params[] = $uid;
-        $params[] = $manageorgid;
+        $params[] = $manageorg['orgids_admin'];
         foreach (DB::fetch_all("select rid from %t  $wheresql ", $params) as $v) {
             $rids[] = $v['rid'];
         }
